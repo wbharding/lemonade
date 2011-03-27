@@ -6,12 +6,14 @@ module Sass::Script::Functions
     Sass::Script::SpriteInfo.new(:url, sprite)
   end
 
-  def sprite_position(file, options = {})
+  def sprite_position(file, options_string = '')
+    options = eval(options_string) || {}
     sprite, sprite_item = sprite_url_and_position(file, options)
     Sass::Script::SpriteInfo.new(:position, sprite, sprite_item, options)
   end
 
-  def sprite_image(file, options = {})
+  def sprite_image(file, options_string = '')
+  	options = eval(options_string) || {}
     sprite, sprite_item = sprite_url_and_position(file, options)
     Sass::Script::SpriteInfo.new(:both, sprite, sprite_item, options)
   end
