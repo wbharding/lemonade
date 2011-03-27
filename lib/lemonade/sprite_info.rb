@@ -7,13 +7,13 @@ module Sass::Script
     attr_reader :sprite_item
     attr_reader :type
 
-    def initialize(type, sprite, sprite_item = nil, position_x = nil, position_y_shift = nil)
+    def initialize(type, sprite, sprite_item = nil, options = {})
       super(nil)
       @type = type
       @sprite = sprite
       @sprite_item = sprite_item
-      @position_x = position_x
-      @position_y_shift = position_y_shift
+      @position_x = options[:position_x]
+      @position_y_shift = options[:position_y_shift]
     end
 
     def to_s(opts = {})

@@ -6,14 +6,14 @@ module Sass::Script::Functions
     Sass::Script::SpriteInfo.new(:url, sprite)
   end
 
-  def sprite_position(file, position_x = nil, position_y_shift = nil, margin_top_or_both = nil, margin_bottom = nil)
-    sprite, sprite_item = sprite_url_and_position(file, position_x, position_y_shift, margin_top_or_both, margin_bottom)
-    Sass::Script::SpriteInfo.new(:position, sprite, sprite_item, position_x, position_y_shift)
+  def sprite_position(file, options = {})
+    sprite, sprite_item = sprite_url_and_position(file, options)
+    Sass::Script::SpriteInfo.new(:position, sprite, sprite_item, options)
   end
 
-  def sprite_image(file, position_x = nil, position_y_shift = nil, margin_top_or_both = nil, margin_bottom = nil)
-    sprite, sprite_item = sprite_url_and_position(file, position_x, position_y_shift, margin_top_or_both, margin_bottom)
-    Sass::Script::SpriteInfo.new(:both, sprite, sprite_item, position_x, position_y_shift)
+  def sprite_image(file, options = {})
+    sprite, sprite_item = sprite_url_and_position(file, options)
+    Sass::Script::SpriteInfo.new(:both, sprite, sprite_item, options)
   end
   alias_method :sprite_img, :sprite_image
 
@@ -48,13 +48,13 @@ private
     Dir.glob(File.join(dir, '*.png')).sort
   end
 
-  def sprite_url_and_position(file, position_x = nil, position_y_shift = nil, margin_top_or_both = nil, margin_bottom = nil)
+  def sprite_url_and_position(file, options = {})
     dir, name, basename = extract_names(file, :check_file => true)
     filestr = File.join(Lemonade.sprites_path, file.value)
 
     sprite_file = "#{dir}#{name}.png"
     sprite = sprite_for(sprite_file)
-    sprite_item = image_for(sprite, filestr, position_x, position_y_shift, margin_top_or_both, margin_bottom)
+    sprite_item = image_for(sprite, filestr, options)
 
     # Create a temporary destination file so compass doesn't complain about a missing image
     FileUtils.touch File.join(Lemonade.images_path, sprite_file)
@@ -85,17 +85,17 @@ private
       }
   end
 
-  def image_for(sprite, file, position_x, position_y_shift, margin_top_or_both, margin_bottom)
+  def image_for(sprite, file, options = {})
     image = sprite[:images].detect{ |image| image[:file] == file }
-    margin_top_or_both ||= Sass::Script::Number.new(0)
+    margin_top_or_both ||= options[:margin_top_or_both] || Sass::Script::Number.new(0)
     margin_top = margin_top_or_both.value #calculate_margin_top(sprite, margin_top_or_both, margin_bottom)
-    margin_bottom = (margin_bottom || margin_top_or_both).value
+    margin_bottom = (options[:margin_bottom] || margin_top_or_both).value
     if image
       image[:margin_top] = margin_top if margin_top > image[:margin_top]
       image[:margin_bottom] = margin_bottom if margin_bottom > image[:margin_bottom]
     else
       width, height = ChunkyPNG::Image.from_file(file).size
-      x = (position_x and position_x.numerator_units == %w(%)) ? position_x : Sass::Script::Number.new(0)
+      x = (options[:position_x] and options[:position_x].numerator_units == %w(%)) ? options[:position_x] : Sass::Script::Number.new(0)
       y = sprite[:height] + margin_top
       y = Sass::Script::Number.new(y, y == 0 ? [] : ['px'])
       image = {
@@ -105,7 +105,8 @@ private
         :x => x,
         :margin_top => margin_top,
         :margin_bottom => margin_bottom,
-        :index => sprite[:images].length
+        :index => sprite[:images].length,
+        :repeat => options[:repeat] == 'true' ? true : false,
       }
       sprite[:images] << image
     end

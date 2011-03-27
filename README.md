@@ -101,6 +101,9 @@ Right aligned images are possible:
 The original image will be placed on the right side of the sprite image.
 Use this, if you have a link with an arrow on the right side (like Apple).
 
+For 1 pixel wide type repeats, you can fill out the image so repeat-x will work.
+
+background: sprite-image("bottles/vertical-orange.png", {:repeat => true});
 
 Note on Patches/Pull Requests
 -----------------------------
