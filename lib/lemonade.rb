@@ -104,17 +104,22 @@ module Lemonade
       sprite[:height] = y
       sprite[:width] = width
     end
-    
+
     def generate_sprite_image(sprite)
       sprite_image = ChunkyPNG::Image.new(sprite[:width], sprite[:height], ChunkyPNG::Color::TRANSPARENT)
       sprite[:images].each do |sprite_item|
-        sprite_item_image  = ChunkyPNG::Image.from_file(sprite_item[:file])
+        sprite_item_image = ChunkyPNG::Image.from_file(sprite_item[:file])
         x = (sprite[:width] - sprite_item[:width]) * (sprite_item[:x].value / 100)
         y = sprite_item[:y].value
-        sprite_image.replace sprite_item_image, x, y
+
+        copies = sprite_item[:repeat] ? (sprite[:width]/sprite_item[:width]).to_i : 1
+
+        copies.times do |i|
+          sprite_image = sprite_image.replace sprite_item_image, x + i*sprite_item[:width], y
+        end
       end
       sprite_image.save File.join(Lemonade.images_path, sprite[:file])
-    end
+		end
 
   end
 
