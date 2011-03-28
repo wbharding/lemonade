@@ -112,10 +112,14 @@ module Lemonade
         x = (sprite[:width] - sprite_item[:width]) * (sprite_item[:x].value / 100)
         y = sprite_item[:y].value
 
-        copies = sprite_item[:repeat] ? (sprite[:width]/sprite_item[:width]).to_i : 1
+        copies = sprite_item[:repeat] ? ((sprite[:width]/sprite_item[:width]).to_i+1) : 1
 
         copies.times do |i|
-          sprite_image = sprite_image.replace sprite_item_image, x + i*sprite_item[:width], y
+          if(i == (copies-1)) # For the last image, push it over the left such that it doesn't extend beyond the canvas
+          	sprite_image = sprite_image.replace sprite_item_image, sprite[:width]-sprite_item[:width], y
+					else
+						sprite_image = sprite_image.replace sprite_item_image, x + i*sprite_item[:width], y
+					end
         end
       end
       sprite_image.save File.join(Lemonade.images_path, sprite[:file])
