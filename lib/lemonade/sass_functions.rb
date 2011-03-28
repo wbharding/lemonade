@@ -12,6 +12,16 @@ module Sass::Script::Functions
     Sass::Script::SpriteInfo.new(:position, sprite, sprite_item, options)
   end
 
+	def sprite_width(file)
+		sprite, sprite_item = sprite_url_and_position(file)
+		Sass::Script::SpriteInfo.new(:width, sprite, sprite_item)
+	end
+
+	def sprite_height(file)
+		sprite, sprite_item = sprite_url_and_position(file)
+		Sass::Script::SpriteInfo.new(:height, sprite, sprite_item)
+	end
+
   def sprite_image(file, options_string = '')
 		options = options_string.blank? ? {} : eval(options_string.value)
     sprite, sprite_item = sprite_url_and_position(file, options)

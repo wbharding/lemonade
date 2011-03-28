@@ -22,14 +22,18 @@ module Sass::Script
         position
       when :url
         url
-      when :both
-        pos = position
-        if pos == '0 0'
-          url
-        else
-          "#{url} #{pos}"
-        end
-      end
+			when :both
+				pos = position
+				if pos == '0 0'
+					url
+				else
+					"#{url} #{pos}"
+				end
+			when :width
+				"#{@sprite_item.try(:[], :width) || 0}px"
+			when :height
+				"#{@sprite_item.try(:[], :height) || 0}px"
+			end
     end
 
     def to_sass
