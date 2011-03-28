@@ -7,13 +7,13 @@ module Sass::Script::Functions
   end
 
   def sprite_position(file, options_string = '')
-    options = eval(options_string) || {}
+		options = options_string.blank? ? {} : eval(options_string.value)
     sprite, sprite_item = sprite_url_and_position(file, options)
     Sass::Script::SpriteInfo.new(:position, sprite, sprite_item, options)
   end
 
   def sprite_image(file, options_string = '')
-  	options = eval(options_string) || {}
+		options = options_string.blank? ? {} : eval(options_string.value)
     sprite, sprite_item = sprite_url_and_position(file, options)
     Sass::Script::SpriteInfo.new(:both, sprite, sprite_item, options)
   end
@@ -108,7 +108,7 @@ private
         :margin_top => margin_top,
         :margin_bottom => margin_bottom,
         :index => sprite[:images].length,
-        :repeat => options[:repeat] == 'true' ? true : false,
+        :repeat => options[:repeat],
       }
       sprite[:images] << image
     end
