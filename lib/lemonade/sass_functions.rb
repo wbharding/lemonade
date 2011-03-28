@@ -96,7 +96,8 @@ private
       image[:margin_top] = margin_top if margin_top > image[:margin_top]
       image[:margin_bottom] = margin_bottom if margin_bottom > image[:margin_bottom]
     else
-      width, height = ChunkyPNG::Image.from_file(file).size
+      chunky_image = ChunkyPNG::Image.from_file(file)      
+      width, height = chunky_image.width, chunky_image.height
       x = (options[:position_x] and options[:position_x].numerator_units == %w(%)) ? options[:position_x] : Sass::Script::Number.new(0)
       y = sprite[:height] + margin_top
       y = Sass::Script::Number.new(y, y == 0 ? [] : ['px'])
