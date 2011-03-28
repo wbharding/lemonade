@@ -115,7 +115,7 @@ module Lemonade
         copies = sprite_item[:repeat] ? ((sprite[:width]/sprite_item[:width]).to_i+1) : 1
 
         copies.times do |i|
-          if(i == (copies-1)) # For the last image, push it over the left such that it doesn't extend beyond the canvas
+          if(sprite_item[:repeat] && i == (copies-1)) # For the last image, push it over the left such that it doesn't extend beyond the canvas
           	sprite_image = sprite_image.replace sprite_item_image, sprite[:width]-sprite_item[:width], y
 					else
 						sprite_image = sprite_image.replace sprite_item_image, x + i*sprite_item[:width], y
