@@ -14,7 +14,8 @@ Gem::Specification.new do |s|
   s.summary = 'On the fly sprite generator for Sass/Compass'
   s.description = %q{Generates sprites on the fly by using `background: sprite-image("sprites/logo.png")`. No Photoshop, no RMagick, no Rake task, save your time and have a lemonade.}
 
-  s.has_rdoc = true
+# rubygems 1.7.2 doesn't like this
+#  s.has_rdoc = true
   s.extra_rdoc_files = ['README.md']
   s.rdoc_options = ['--charset=UTF-8']
 
